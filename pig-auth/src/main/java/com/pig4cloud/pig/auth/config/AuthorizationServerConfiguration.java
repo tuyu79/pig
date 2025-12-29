@@ -20,6 +20,7 @@ import com.pig4cloud.pig.auth.support.CustomeOAuth2AccessTokenGenerator;
 import com.pig4cloud.pig.auth.support.core.CustomeOAuth2TokenCustomizer;
 import com.pig4cloud.pig.auth.support.core.FormIdentityLoginConfigurer;
 import com.pig4cloud.pig.auth.support.core.PigDaoAuthenticationProvider;
+import com.pig4cloud.pig.auth.support.filter.AuthSecurityConfigProperties;
 import com.pig4cloud.pig.auth.support.filter.PasswordDecoderFilter;
 import com.pig4cloud.pig.auth.support.filter.ValidateCodeFilter;
 import com.pig4cloud.pig.auth.support.handler.PigAuthenticationFailureEventHandler;
@@ -77,6 +78,8 @@ public class AuthorizationServerConfiguration {
 
 	private final PigBootCorsProperties pigBootCorsProperties;
 
+	private final AuthSecurityConfigProperties authSecurityConfigProperties;
+
 	/**
 	 * 网关地址，用于拼接登录页面完整路径
 	 */
@@ -123,7 +126,8 @@ public class AuthorizationServerConfiguration {
 				, Customizer.withDefaults());
 
 		// 设置授权码模式登录页面（支持网关地址拼接）
-		http.with(FormIdentityLoginConfigurer.withGatewayUrl(gatewayUrl), Customizer.withDefaults());
+		http.with(FormIdentityLoginConfigurer.withGatewayUrl(gatewayUrl)
+				.authPath(authSecurityConfigProperties.getAuthPath()), Customizer.withDefaults());
 
 		// 配置 CORS 跨域资源共享
 		if (Boolean.TRUE.equals(pigBootCorsProperties.getEnabled())) {

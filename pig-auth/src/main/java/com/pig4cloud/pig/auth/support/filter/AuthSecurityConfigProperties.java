@@ -39,4 +39,9 @@ public class AuthSecurityConfigProperties {
 	 */
 	private List<String> ignoreClients;
 
+	/**
+	 * Gateway认证路径前缀
+	 */
+	private String authPath = "/auth";
+
 }

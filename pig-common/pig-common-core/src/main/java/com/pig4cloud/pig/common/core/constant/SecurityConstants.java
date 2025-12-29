@@ -132,4 +132,9 @@ public interface SecurityConstants {
 	 */
 	String CUSTOM_CONSENT_PAGE_URI = "/oauth2/confirm_access";
 
+	/**
+	 * Gateway认证路径前缀
+	 */
+	String AUTH_PATH = "/auth";
+
 }

@@ -18,6 +18,7 @@ package com.pig4cloud.pig.auth.support.handler;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HttpUtil;
+import com.pig4cloud.pig.common.core.constant.SecurityConstants;
 import com.pig4cloud.pig.common.core.util.WebUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,9 +49,15 @@ public class FormAuthenticationSuccessHandler extends SavedRequestAwareAuthentic
 
 	private final RequestCache requestCache = new HttpSessionRequestCache();
 	private final String gatewayUrl;
+	private final String authPath;
 
 	public FormAuthenticationSuccessHandler(String gatewayUrl) {
+		this(gatewayUrl, SecurityConstants.AUTH_PATH);
+	}
+
+	public FormAuthenticationSuccessHandler(String gatewayUrl, String authPath) {
 		this.gatewayUrl = gatewayUrl;
+		this.authPath = authPath;
 	}
 
 	@Override
@@ -68,7 +75,7 @@ public class FormAuthenticationSuccessHandler extends SavedRequestAwareAuthentic
 		}
 		clearAuthenticationAttributes(request);
 
-		String redirectUrl = gatewayUrl + "/auth" + savedRequest.getRequestURI() + "?" + savedRequest.getQueryString();
+		String redirectUrl = gatewayUrl + authPath + savedRequest.getRequestURI() + "?" + savedRequest.getQueryString();
 		getRedirectStrategy().sendRedirect(request, response, redirectUrl);
 	}
 }

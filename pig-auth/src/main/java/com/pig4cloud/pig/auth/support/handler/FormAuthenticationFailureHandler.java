@@ -18,6 +18,7 @@ package com.pig4cloud.pig.auth.support.handler;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.HttpUtil;
+import com.pig4cloud.pig.common.core.constant.SecurityConstants;
 import com.pig4cloud.pig.common.core.util.WebUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,8 +41,15 @@ public class FormAuthenticationFailureHandler implements AuthenticationFailureHa
 
 	private final String gatewayUrl;
 
+	private final String authPath;
+
 	public FormAuthenticationFailureHandler(String gatewayUrl) {
+		this(gatewayUrl, SecurityConstants.AUTH_PATH);
+	}
+
+	public FormAuthenticationFailureHandler(String gatewayUrl, String authPath) {
 		this.gatewayUrl = gatewayUrl;
+		this.authPath = authPath;
 	}
 
 	/**
@@ -66,7 +74,7 @@ public class FormAuthenticationFailureHandler implements AuthenticationFailureHa
 				CharsetUtil.CHARSET_UTF_8);
 
 		if (StringUtils.hasText(gatewayUrl)) {
-			url = gatewayUrl + "/auth" + url;
+			url = gatewayUrl + authPath + url;
 		}
 
 		try {

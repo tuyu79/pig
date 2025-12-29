@@ -3,6 +3,7 @@ package com.pig4cloud.pig.auth.support.core;
 import com.pig4cloud.pig.auth.support.handler.FormAuthenticationFailureHandler;
 import com.pig4cloud.pig.auth.support.handler.FormAuthenticationSuccessHandler;
 import com.pig4cloud.pig.auth.support.handler.SsoLogoutSuccessHandler;
+import com.pig4cloud.pig.common.core.constant.SecurityConstants;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,11 @@ public final class FormIdentityLoginConfigurer
 	 * 网关地址，用于拼接登录页面完整路径
 	 */
 	private String gatewayUrl;
+
+	/**
+	 * 网关认证路径前缀
+	 */
+	private String authPath = SecurityConstants.AUTH_PATH;
 
 	/**
 	 * 使用网关地址创建配置器
@@ -42,16 +48,29 @@ public final class FormIdentityLoginConfigurer
 		return this;
 	}
 
+	/**
+	 * 设置认证路径前缀
+	 *
+	 * @param authPath 认证路径前缀，如 /auth
+	 * @return this
+	 */
+	public FormIdentityLoginConfigurer authPath(String authPath) {
+		this.authPath = authPath;
+		return this;
+	}
+
 	@Override
 	public void init(HttpSecurity http) throws Exception {
-		// 拼接登录页面路径：网关地址 + /token/login
-		String loginPage = StringUtils.hasText(gatewayUrl) ? gatewayUrl + "/auth/token/login" : "/token/login";
+		// 拼接登录页面路径：网关地址 + 认证路径 + /token/login
+		String loginPage = StringUtils.hasText(gatewayUrl)
+				? gatewayUrl + authPath + "/token/login"
+				: "/token/login";
 
 		http.formLogin(formLogin -> {
 					formLogin.loginPage(loginPage);
 					formLogin.loginProcessingUrl("/oauth2/form");
-					formLogin.failureHandler(new FormAuthenticationFailureHandler(gatewayUrl));
-					formLogin.successHandler(new FormAuthenticationSuccessHandler(gatewayUrl));
+					formLogin.failureHandler(new FormAuthenticationFailureHandler(gatewayUrl, authPath));
+					formLogin.successHandler(new FormAuthenticationSuccessHandler(gatewayUrl, authPath));
 				})
 				.logout(logout -> logout.logoutUrl("/oauth2/logout")
 						.logoutSuccessHandler(new SsoLogoutSuccessHandler())
