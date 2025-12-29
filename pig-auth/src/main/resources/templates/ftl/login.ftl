@@ -8,7 +8,8 @@
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">安全便捷的企业级认证服务</p>
     </div>
 
-    <form class="form-signin" action="${request.contextPath}/oauth2/form" method="post">
+    <#assign formAction = gatewayUrl?has_content ? then(gatewayUrl + "/auth/oauth2/form", "/oauth2/form") />
+    <form class="form-signin" action="${formAction}" method="post">
         <input type="hidden" name="client_id" value="pig">
         <input type="hidden" name="grant_type" value="password">
         <div class="space-y-6">

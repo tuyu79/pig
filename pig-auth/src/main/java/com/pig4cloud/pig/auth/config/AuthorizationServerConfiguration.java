@@ -31,6 +31,7 @@ import com.pig4cloud.pig.auth.support.sms.OAuth2ResourceOwnerSmsAuthenticationPr
 import com.pig4cloud.pig.common.core.constant.SecurityConstants;
 import com.pig4cloud.pig.common.security.component.PigBootCorsProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -77,7 +78,14 @@ public class AuthorizationServerConfiguration {
 	private final PigBootCorsProperties pigBootCorsProperties;
 
 	/**
+	 * 网关地址，用于拼接登录页面完整路径
+	 */
+	@Value("${security.gateway-url:}")
+	private String gatewayUrl;
+
+	/**
 	 * Authorization Server 配置，仅对 /oauth2/** 的请求有效
+	 *
 	 * @param http http
 	 * @return {@link SecurityFilterChain }
 	 * @throws Exception 异常
@@ -88,30 +96,34 @@ public class AuthorizationServerConfiguration {
 		// 配置授权服务器的安全策略，只有/oauth2/**的请求才会走如下的配置
 		http.securityMatcher("/oauth2/**");
 		OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+		authorizationServerConfigurer
+				.tokenEndpoint((tokenEndpoint) -> {// 个性化认证授权端点
+					tokenEndpoint.accessTokenRequestConverter(accessTokenRequestConverter()) // 注入自定义的授权认证Converter
+							.accessTokenResponseHandler(new PigAuthenticationSuccessEventHandler()) // 登录成功处理器
+							.errorResponseHandler(new PigAuthenticationFailureEventHandler());// 登录失败处理器
+				})
+				.clientAuthentication(oAuth2ClientAuthenticationConfigurer -> // 个性化客户端认证
+						oAuth2ClientAuthenticationConfigurer.errorResponseHandler(new PigAuthenticationFailureEventHandler()))// 处理客户端认证异常
+				.authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint// 授权码端点个性化confirm页面
+						.consentPage(SecurityConstants.CUSTOM_CONSENT_PAGE_URI))
+		;
 
 		// 增加验证码过滤器
 		http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
 		// 增加密码解密过滤器
 		http.addFilterBefore(passwordDecoderFilter, UsernamePasswordAuthenticationFilter.class);
 
-		http.with(authorizationServerConfigurer.tokenEndpoint((tokenEndpoint) -> {// 个性化认证授权端点
-			tokenEndpoint.accessTokenRequestConverter(accessTokenRequestConverter()) // 注入自定义的授权认证Converter
-				.accessTokenResponseHandler(new PigAuthenticationSuccessEventHandler()) // 登录成功处理器
-				.errorResponseHandler(new PigAuthenticationFailureEventHandler());// 登录失败处理器
-		}).clientAuthentication(oAuth2ClientAuthenticationConfigurer -> // 个性化客户端认证
-		oAuth2ClientAuthenticationConfigurer.errorResponseHandler(new PigAuthenticationFailureEventHandler()))// 处理客户端认证异常
-			.authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint// 授权码端点个性化confirm页面
-				.consentPage(SecurityConstants.CUSTOM_CONSENT_PAGE_URI)), Customizer.withDefaults())
-			.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated());
+		http.with(authorizationServerConfigurer, Customizer.withDefaults())
+				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated());
 
 		// 设置 Token 存储的策略
-		http.with(authorizationServerConfigurer.authorizationService(authorizationService)// redis存储token的实现
-			.authorizationServerSettings(
-					AuthorizationServerSettings.builder().issuer(SecurityConstants.PROJECT_LICENSE).build()),
-				Customizer.withDefaults());
+		http.with(
+				authorizationServerConfigurer.authorizationService(authorizationService)// redis存储token的实现
+						.authorizationServerSettings(AuthorizationServerSettings.builder().issuer(SecurityConstants.PROJECT_LICENSE).build())
+				, Customizer.withDefaults());
 
-		// 设置授权码模式登录页面
-		http.with(new FormIdentityLoginConfigurer(), Customizer.withDefaults());
+		// 设置授权码模式登录页面（支持网关地址拼接）
+		http.with(FormIdentityLoginConfigurer.withGatewayUrl(gatewayUrl), Customizer.withDefaults());
 
 		// 配置 CORS 跨域资源共享
 		if (Boolean.TRUE.equals(pigBootCorsProperties.getEnabled())) {
@@ -129,6 +141,7 @@ public class AuthorizationServerConfiguration {
 	/**
 	 * 令牌生成规则实现 </br>
 	 * client:username:uuid
+	 *
 	 * @return OAuth2TokenGenerator
 	 */
 	@Bean
@@ -141,6 +154,7 @@ public class AuthorizationServerConfiguration {
 
 	/**
 	 * request -> xToken 注入请求转换器
+	 *
 	 * @return DelegatingAuthenticationConverter
 	 */
 	@Bean
@@ -179,6 +193,7 @@ public class AuthorizationServerConfiguration {
 
 	/**
 	 * 配置 CORS 跨域资源共享
+	 *
 	 * @return UrlBasedCorsConfigurationSource CORS配置源
 	 */
 	private UrlBasedCorsConfigurationSource corsConfigurationSource() {

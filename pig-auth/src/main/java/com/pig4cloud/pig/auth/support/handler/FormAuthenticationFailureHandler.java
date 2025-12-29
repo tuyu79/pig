@@ -25,6 +25,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -37,16 +38,23 @@ import java.io.IOException;
 @Slf4j
 public class FormAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+	private final String gatewayUrl;
+
+	public FormAuthenticationFailureHandler(String gatewayUrl) {
+		this.gatewayUrl = gatewayUrl;
+	}
+
 	/**
 	 * 当认证失败时调用
-	 * @param request 认证尝试发生的请求
-	 * @param response 响应对象
+	 *
+	 * @param request   认证尝试发生的请求
+	 * @param response  响应对象
 	 * @param exception 拒绝认证时抛出的异常
 	 */
 	@Override
 	@SneakyThrows
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) {
+										AuthenticationException exception) {
 		log.debug("表单登录失败:{}", exception.getLocalizedMessage());
 
 		// 获取当前请求的context-path
@@ -57,10 +65,13 @@ public class FormAuthenticationFailureHandler implements AuthenticationFailureHa
 				String.format("%s/token/login?error=%s", contextPath, exception.getMessage()),
 				CharsetUtil.CHARSET_UTF_8);
 
+		if (StringUtils.hasText(gatewayUrl)) {
+			url = gatewayUrl + "/auth" + url;
+		}
+
 		try {
 			WebUtils.getResponse().sendRedirect(url);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			log.error("重定向失败", e);
 		}
 	}

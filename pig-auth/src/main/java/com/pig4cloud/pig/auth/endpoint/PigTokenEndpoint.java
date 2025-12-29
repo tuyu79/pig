@@ -24,6 +24,7 @@ import java.util.Set;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -102,16 +103,25 @@ public class PigTokenEndpoint {
 	private final CacheManager cacheManager;
 
 	/**
+	 * 网关地址，用于拼接登录表单提交完整路径
+	 */
+	@Value("${security.gateway-url:}")
+	private String gatewayUrl;
+
+	/**
 	 * 授权码模式：认证页面
 	 * @param modelAndView 视图模型对象
 	 * @param error 表单登录失败处理回调的错误信息
+	 * @param redirectUri 授权回调地址
 	 * @return 包含登录页面视图和错误信息的ModelAndView对象
 	 */
 	@GetMapping("/token/login")
 	@Operation(summary = "授权码模式：认证页面", description = "授权码模式：认证页面")
-	public ModelAndView require(ModelAndView modelAndView, @RequestParam(required = false) String error) {
+	public ModelAndView require(ModelAndView modelAndView, @RequestParam(required = false) String error,
+			@RequestParam(required = false) String redirectUri) {
 		modelAndView.setViewName("ftl/login");
 		modelAndView.addObject("error", error);
+		modelAndView.addObject("gatewayUrl", gatewayUrl);
 		return modelAndView;
 	}
 
