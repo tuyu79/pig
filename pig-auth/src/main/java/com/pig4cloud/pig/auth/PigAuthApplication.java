@@ -20,6 +20,7 @@ import com.pig4cloud.pig.common.feign.annotation.EnablePigFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * 认证授权中心应用启动类
@@ -29,6 +30,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @EnablePigFeignClients
 @EnableDiscoveryClient
+@EnableRedisHttpSession
 @SpringBootApplication
 public class PigAuthApplication {
 
