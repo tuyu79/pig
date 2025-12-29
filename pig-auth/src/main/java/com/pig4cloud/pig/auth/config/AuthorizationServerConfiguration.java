@@ -32,7 +32,6 @@ import com.pig4cloud.pig.auth.support.sms.OAuth2ResourceOwnerSmsAuthenticationPr
 import com.pig4cloud.pig.common.core.constant.SecurityConstants;
 import com.pig4cloud.pig.common.security.component.PigBootCorsProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -81,12 +80,6 @@ public class AuthorizationServerConfiguration {
 	private final AuthSecurityConfigProperties authSecurityConfigProperties;
 
 	/**
-	 * 网关地址，用于拼接登录页面完整路径
-	 */
-	@Value("${security.gateway-url:}")
-	private String gatewayUrl;
-
-	/**
 	 * Authorization Server 配置，仅对 /oauth2/** 的请求有效
 	 *
 	 * @param http http
@@ -126,8 +119,8 @@ public class AuthorizationServerConfiguration {
 				, Customizer.withDefaults());
 
 		// 设置授权码模式登录页面（支持网关地址拼接）
-		http.with(FormIdentityLoginConfigurer.withGatewayUrl(gatewayUrl)
-				.authPath(authSecurityConfigProperties.getAuthPath()), Customizer.withDefaults());
+		http.with(FormIdentityLoginConfigurer.withGatewayUrl(authSecurityConfigProperties.getGatewayUrl())
+				.authPath(authSecurityConfigProperties.getGatewayForwardPath()), Customizer.withDefaults());
 
 		// 配置 CORS 跨域资源共享
 		if (Boolean.TRUE.equals(pigBootCorsProperties.getEnabled())) {

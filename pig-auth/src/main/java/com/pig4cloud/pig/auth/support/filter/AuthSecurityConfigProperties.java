@@ -42,6 +42,11 @@ public class AuthSecurityConfigProperties {
 	/**
 	 * Gateway认证路径前缀
 	 */
-	private String authPath = "/auth";
+	private String gatewayForwardPath = "/auth";
+
+	/**
+	 * 网关地址，用于拼接登录页面完整路径
+	 */
+	private String gatewayUrl;
 
 }

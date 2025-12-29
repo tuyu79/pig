@@ -24,7 +24,6 @@ import java.util.Set;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,6 +57,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pig4cloud.pig.admin.api.entity.SysOauthClientDetails;
 import com.pig4cloud.pig.admin.api.feign.RemoteClientDetailsService;
 import com.pig4cloud.pig.admin.api.vo.TokenVo;
+import com.pig4cloud.pig.auth.support.filter.AuthSecurityConfigProperties;
 import com.pig4cloud.pig.auth.support.handler.PigAuthenticationFailureEventHandler;
 import com.pig4cloud.pig.common.core.constant.CacheConstants;
 import com.pig4cloud.pig.common.core.constant.CommonConstants;
@@ -102,11 +102,7 @@ public class PigTokenEndpoint {
 
 	private final CacheManager cacheManager;
 
-	/**
-	 * 网关地址，用于拼接登录表单提交完整路径
-	 */
-	@Value("${security.gateway-url:}")
-	private String gatewayUrl;
+	private final AuthSecurityConfigProperties authSecurityConfigProperties;
 
 	/**
 	 * 授权码模式：认证页面
@@ -121,7 +117,8 @@ public class PigTokenEndpoint {
 			@RequestParam(required = false) String redirectUri) {
 		modelAndView.setViewName("ftl/login");
 		modelAndView.addObject("error", error);
-		modelAndView.addObject("gatewayUrl", gatewayUrl);
+		modelAndView.addObject("gatewayUrl", authSecurityConfigProperties.getGatewayUrl());
+		modelAndView.addObject("gatewayForwardPath", authSecurityConfigProperties.getGatewayForwardPath());
 		return modelAndView;
 	}
 
