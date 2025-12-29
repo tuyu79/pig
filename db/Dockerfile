@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/dockerhub_mirror/mysql-server:8.0.32
+FROM mysql:latest
 
 MAINTAINER lengleng(wangiegie@gmail.com)
 
@@ -9,5 +9,7 @@ RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY ./pig.sql /docker-entrypoint-initdb.d
 
 COPY ./pig_config.sql /docker-entrypoint-initdb.d
+
+COPY ./my.cnf /etc/my.cnf
 
 EXPOSE 3306
