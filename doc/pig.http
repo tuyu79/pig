@@ -24,7 +24,7 @@ Cookie: SESSION=MTQ2N2ZmM2ItNjNlMS00YjQ5LThiMTEtYmM4YjU1ZDY4Y2Rm;
 ### 登录（网关）
 ### 模拟统一认证平台登录
 POST http://127.0.0.1:9999/auth/oauth2/form
-Cookie: SESSION=MTQ2N2ZmM2ItNjNlMS00YjQ5LThiMTEtYmM4YjU1ZDY4Y2Rm;
+Cookie: SESSION=YjQyNTA4YzctNDcwZS00MWM3LWI5ODktNDU5Njc5ZDQxNGQz;
 Content-Type: application/x-www-form-urlencoded
 
 client_id=pig&grant_type=password&username=admin&password=123456
@@ -32,7 +32,7 @@ client_id=pig&grant_type=password&username=admin&password=123456
 ### GET
 ### 统一认证平台登录后跳转到授权地址，之前已经登录过了，所以会认证通过，然后根据之前保存的请求信息重定向到回调地址
 GET http://127.0.0.1:9999/auth/oauth2/authorize?response_type=code&client_id=app&scope=server&redirect_uri=http://localhost:4040/sso1/login
-Cookie: SESSION=ODJkMzUxNTUtOWRjNS00ZmJhLWI4ZTItZDI3YTA2Mzg1N2Mw;
+Cookie: SESSION=MDBmOTExM2QtNzViZS00YTdhLWJiYzgtOTVhNzUzNDY3MWJj;
 Accept: text/html
 
 
@@ -41,7 +41,7 @@ POST http://127.0.0.1:9999/auth/oauth2/token
 Authorization: Basic YXBwOmFwcA==
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=authorization_code&scope=server&redirect_uri=http://localhost:4040/sso1/login&code=kGRFhlTcAg4LB6n8qGhbJF9JtvyOW5cmPtobHPU9cwDISYvMxQd036arTjpJdHxGnrTgHCiIL7U85SAgwfCmX3VU2JZV2vM4_EWPIWeZAdub9jkqrlFMVzWEL2H37HeA
+grant_type=authorization_code&scope=server&redirect_uri=http://localhost:4040/sso1/login&code=bkyEqSe66JG1kyLkIv8FRtjnG6U3IvpQ5KC0R4R6Ixf5KK28zzVu0WXg4_qXhwl7ZB2KO4r-UrroUKsKNDkP933cYvFGxAuMryk3Dsq38G0iVNbY8i9aFyT6T7sNb2Qq
 
 
 ### 请求验证码
