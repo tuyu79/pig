@@ -1,4 +1,6 @@
-# 数据库启
+# 本地测试
+
+[目录](../db)
 
 ```bash
 # 打镜像
@@ -27,3 +29,10 @@ docker run --name nacos-standalone-derby \
     -p 9848:9848 \
     -d nacos/nacos-server:latest
 ```
+
+# 服务
+
+### Nacos
+
+- 访问地址：http://localhost:8080/
+- 账号：Nacos/Nacos

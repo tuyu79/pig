@@ -1,0 +1,504 @@
+﻿
+数据库,pig
+
+表名,sys_dept,表说明,部门管理
+字段名,字段类型,主键,可为空,默认值,说明
+dept_id,bigint,是,否,,部门ID
+name,varchar(50),,是,NULL,部门名称
+sort_order,int,,否,0,排序
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,创建时间
+update_time,datetime,,是,NULL,修改时间
+del_flag,char(1),,是,0,删除标志
+parent_id,bigint,,是,NULL,父级部门ID
+
+表名,sys_dict,表说明,字典表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,编号
+dict_type,varchar(100),,是,NULL,字典类型
+description,varchar(100),,是,NULL,描述
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,创建时间
+update_time,datetime,,是,NULL,更新时间
+remarks,varchar(255),,是,NULL,备注信息
+system_flag,char(1),,是,0,系统标志
+del_flag,char(1),,是,0,删除标志
+
+表名,sys_dict_item,表说明,字典项
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,编号
+dict_id,bigint,,否,,字典ID
+item_value,varchar(100),,是,NULL,字典项值
+label,varchar(100),,是,NULL,字典项名称
+dict_type,varchar(100),,是,NULL,字典类型
+description,varchar(100),,是,NULL,字典项描述
+sort_order,int,,否,0,排序（升序）
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,创建时间
+update_time,datetime,,是,NULL,更新时间
+remarks,varchar(255),,是,NULL,备注信息
+del_flag,char(1),,是,0,删除标志
+
+表名,sys_file,表说明,文件管理表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,编号
+file_name,varchar(100),,是,NULL,文件名
+bucket_name,varchar(200),,是,NULL,文件存储桶名称
+original,varchar(100),,是,NULL,原始文件名
+type,varchar(50),,是,NULL,文件类型
+file_size,bigint,,是,NULL,文件大小
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,上传时间
+update_time,datetime,,是,NULL,更新时间
+del_flag,char(1),,是,0,删除标志
+
+表名,sys_log,表说明,日志表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,编号
+log_type,char(1),,是,0,日志类型
+title,varchar(255),,是,NULL,日志标题
+service_id,varchar(32),,是,NULL,服务ID
+create_by,varchar(64),,是, ,创建人
+update_by,varchar(64),,是, ,修改人
+create_time,datetime,,是,NULL,创建时间
+update_time,datetime,,是,NULL,更新时间
+remote_addr,varchar(255),,是,NULL,远程地址
+user_agent,varchar(1000),,是,NULL,用户代理
+request_uri,varchar(255),,是,NULL,请求URI
+method,varchar(10),,是,NULL,请求方法
+params,text,,是,,请求参数
+time,bigint,,是,NULL,执行时间
+del_flag,char(1),,是,0,删除标志
+exception,text,,是,,异常信息
+
+表名,sys_menu,表说明,菜单权限表
+字段名,字段类型,主键,可为空,默认值,说明
+menu_id,bigint,是,否,,菜单ID
+name,varchar(32),,是,NULL,菜单名称
+en_name,varchar(128),,是,NULL,英文名称
+permission,varchar(32),,是,NULL,权限标识
+path,varchar(128),,是,NULL,路由路径
+parent_id,bigint,,是,NULL,父菜单ID
+icon,varchar(64),,是,NULL,菜单图标
+visible,char(1),,是,1,是否可见，0隐藏，1显示
+sort_order,int,,是,1,排序值，越小越靠前
+keep_alive,char(1),,是,0,是否缓存，0否，1是
+embedded,char(1),,是,NULL,是否内嵌，0否，1是
+menu_type,char(1),,是,0,菜单类型，0目录，1菜单，2按钮
+create_by,varchar(64),,否, ,创建人
+create_time,datetime,,是,CURRENT_TIMESTAMP,创建时间
+update_by,varchar(64),,否, ,修改人
+update_time,datetime,,是,NULL,更新时间
+del_flag,char(1),,是,0,删除标志，0未删除，1已删除
+
+表名,sys_oauth_client_details,表说明,终端信息表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,ID
+client_id,varchar(32),,否,,客户端ID
+resource_ids,varchar(256),,是,NULL,资源ID集合
+client_secret,varchar(256),,是,NULL,客户端秘钥
+scope,varchar(256),,是,NULL,授权范围
+authorized_grant_types,varchar(256),,是,NULL,授权类型
+web_server_redirect_uri,varchar(256),,是,NULL,回调地址
+authorities,varchar(256),,是,NULL,权限集合
+access_token_validity,int,,是,NULL,访问令牌有效期（秒）
+refresh_token_validity,int,,是,NULL,刷新令牌有效期（秒）
+additional_information,varchar(4096),,是,NULL,附加信息
+autoapprove,varchar(256),,是,NULL,自动授权
+del_flag,char(1),,是,0,删除标记，0未删除，1已删除
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,创建时间
+update_time,datetime,,是,NULL,更新时间
+
+表名,sys_post,表说明,岗位信息表
+字段名,字段类型,主键,可为空,默认值,说明
+post_id,bigint,是,否,,岗位ID
+post_code,varchar(64),,否,,岗位编码
+post_name,varchar(50),,否,,岗位名称
+post_sort,int,,否,,岗位排序
+remark,varchar(500),,是,NULL,岗位描述
+del_flag,char(1),,否,0,是否删除  -1：已删除  0：正常
+create_time,datetime,,是,NULL,创建时间
+create_by,varchar(64),,否,,创建人
+update_time,datetime,,是,NULL,更新时间
+update_by,varchar(64),,否,,更新人
+
+表名,sys_public_param,表说明,公共参数配置表
+字段名,字段类型,主键,可为空,默认值,说明
+public_id,bigint,是,否,,编号
+public_name,varchar(128),,是,NULL,名称
+public_key,varchar(128),,是,NULL,键
+public_value,varchar(128),,是,NULL,值
+status,char(1),,是,0,状态，0禁用，1启用
+validate_code,varchar(64),,是,NULL,校验码
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,否,CURRENT_TIMESTAMP,创建时间
+update_time,datetime,,是,NULL,更新时间
+public_type,char(1),,是,0,类型，0未知，1系统，2业务
+system_flag,char(1),,是,0,系统标识，0非系统，1系统
+del_flag,char(1),,是,0,删除标记，0未删除，1已删除
+
+表名,sys_role,表说明,系统角色表
+字段名,字段类型,主键,可为空,默认值,说明
+role_id,bigint,是,否,,角色ID
+role_name,varchar(64),,是,NULL,角色名称
+role_code,varchar(64),,是,NULL,角色编码
+role_desc,varchar(255),,是,NULL,角色描述
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,否,CURRENT_TIMESTAMP,创建时间
+update_time,datetime,,是,NULL,更新时间
+del_flag,char(1),,是,0,删除标记，0未删除，1已删除
+
+表名,sys_role_menu,表说明,角色菜单表
+字段名,字段类型,主键,可为空,默认值,说明
+role_id,bigint,,否,,角色ID
+menu_id,bigint,,否,,菜单ID
+
+表名,sys_user,表说明,用户表
+字段名,字段类型,主键,可为空,默认值,说明
+user_id,bigint,是,否,,用户ID
+username,varchar(64),,是,NULL,用户名
+password,varchar(255),,是,NULL,密码
+salt,varchar(255),,是,NULL,盐值
+phone,varchar(20),,是,NULL,电话号码
+avatar,varchar(255),,是,NULL,头像
+nickname,varchar(64),,是,NULL,昵称
+name,varchar(64),,是,NULL,姓名
+email,varchar(128),,是,NULL,邮箱地址
+dept_id,bigint,,是,NULL,所属部门ID
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,CURRENT_TIMESTAMP,创建时间
+update_time,datetime,,是,NULL,修改时间
+lock_flag,char(1),,是,0,锁定标记，0未锁定，9已锁定
+del_flag,char(1),,是,0,删除标记，0未删除，1已删除
+wx_openid,varchar(32),,是,NULL,微信登录openId
+mini_openid,varchar(32),,是,NULL,小程序openId
+qq_openid,varchar(32),,是,NULL,QQ openId
+gitee_login,varchar(100),,是,NULL,码云标识
+osc_id,varchar(100),,是,NULL,开源中国标识
+
+表名,sys_user_post,表说明,用户与岗位关联表
+字段名,字段类型,主键,可为空,默认值,说明
+user_id,bigint,,否,,用户ID
+post_id,bigint,,否,,岗位ID
+
+表名,sys_user_role,表说明,用户角色表
+字段名,字段类型,主键,可为空,默认值,说明
+user_id,bigint,,否,,用户ID
+role_id,bigint,,否,,角色ID
+
+表名,sys_job,表说明,定时任务调度表
+字段名,字段类型,主键,可为空,默认值,说明
+job_id,bigint,是,否,,任务id
+job_name,varchar(64),,否,,任务名称
+job_group,varchar(64),,否,,任务组名
+job_order,char(1),,是,1,组内执行顺利，值越大执行优先级越高，最大值9，最小值1
+job_type,char(1),,否,1,1、java类;2、spring bean名称;3、rest调用;4、jar调用;9其他
+execute_path,varchar(500),,是,NULL,"job_type=3时，rest调用地址，仅支持rest get协议,需要增加String返回值，0成功，1失败;job_type=4时，jar路径;其它值为空"
+class_name,varchar(500),,是,NULL,job_type=1时，类完整路径;job_type=2时，spring bean名称;其它值为空
+method_name,varchar(500),,是,NULL,任务方法
+method_params_value,varchar(2000),,是,NULL,参数值
+cron_expression,varchar(255),,是,NULL,cron执行表达式
+misfire_policy,varchar(20),,是,3,错失执行策略（1错失周期立即执行 2错失周期执行一次 3下周期执行）
+job_tenant_type,char(1),,是,1,1、多租户任务;2、非多租户任务
+job_status,char(1),,是,0,状态（1、未发布;2、运行中;3、暂停;4、删除;）
+job_execute_status,char(1),,是,0,状态（0正常 1异常）
+create_by,varchar(64),,是,NULL,创建者
+create_time,datetime,,否,CURRENT_TIMESTAMP,创建时间
+update_by,varchar(64),,是,,更新者
+update_time,datetime,,否,CURRENT_TIMESTAMP,更新时间
+start_time,timestamp,,是,NULL,初次执行时间
+previous_time,timestamp,,是,NULL,上次执行时间
+next_time,timestamp,,是,NULL,下次执行时间
+remark,varchar(500),,是,,备注信息
+
+表名,sys_job_log,表说明,定时任务执行日志表
+字段名,字段类型,主键,可为空,默认值,说明
+job_log_id,bigint,是,否,,任务日志ID
+job_id,bigint,,否,,任务id
+job_name,varchar(64),,是,NULL,任务名称
+job_group,varchar(64),,是,NULL,任务组名
+job_order,char(1),,是,NULL,组内执行顺利，值越大执行优先级越高，最大值9，最小值1
+job_type,char(1),,否,1,1、java类;2、spring bean名称;3、rest调用;4、jar调用;9其他
+execute_path,varchar(500),,是,NULL,job_type=3时，rest调用地址，仅支持post协议;job_type=4时，jar路径;其它值为空
+class_name,varchar(500),,是,NULL,job_type=1时，类完整路径;job_type=2时，spring bean名称;其它值为空
+method_name,varchar(500),,是,NULL,任务方法
+method_params_value,varchar(2000),,是,NULL,参数值
+cron_expression,varchar(255),,是,NULL,cron执行表达式
+job_message,varchar(500),,是,NULL,日志信息
+job_log_status,char(1),,是,0,执行状态（0正常 1失败）
+execute_time,varchar(30),,是,NULL,执行时间
+exception_info,varchar(2000),,是,,异常信息
+create_time,datetime,,否,CURRENT_TIMESTAMP,创建时间
+
+表名,gen_datasource_conf,表说明,数据源表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,主键
+name,varchar(64),,是,NULL,别名
+url,varchar(255),,是,NULL,jdbcurl
+username,varchar(64),,是,NULL,用户名
+password,varchar(64),,是,NULL,密码
+create_time,datetime,,是,CURRENT_TIMESTAMP,创建时间
+update_time,datetime,,是,CURRENT_TIMESTAMP,更新
+del_flag,char(1),,是,0,删除标记
+ds_type,varchar(64),,是,NULL,数据库类型
+conf_type,char(1),,是,NULL,配置类型
+ds_name,varchar(64),,是,NULL,数据库名称
+instance,varchar(64),,是,NULL,实例
+port,int,,是,NULL,端口
+host,varchar(128),,是,NULL,主机
+
+表名,gen_field_type,表说明,字段类型管理
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,主键
+column_type,varchar(200),,是,NULL,字段类型
+attr_type,varchar(200),,是,NULL,属性类型
+package_name,varchar(200),,是,NULL,属性包名
+create_time,datetime,,是,NULL,创建时间
+create_by,varchar(64),,是,NULL,创建人
+update_time,datetime,,是,NULL,修改时间
+update_by,varchar(64),,是,NULL,修改人
+del_flag,char(1),,是,0,删除标记
+
+表名,gen_group,表说明,模板分组
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,
+group_name,varchar(255),,是,NULL,分组名称
+group_desc,varchar(255),,是,NULL,分组描述
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+create_time,datetime,,是,NULL,创建人
+update_time,datetime,,是,NULL,修改人
+del_flag,char(1),,是,0,删除标记
+
+表名,gen_table,表说明,代码生成表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,
+table_name,varchar(200),,是,NULL,表名
+class_name,varchar(200),,是,NULL,类名
+db_type,varchar(200),,是,NULL,数据库类型
+table_comment,varchar(200),,是,NULL,说明
+author,varchar(200),,是,NULL,作者
+email,varchar(200),,是,NULL,邮箱
+package_name,varchar(200),,是,NULL,项目包名
+version,varchar(200),,是,NULL,项目版本号
+i18n,char(1),,是,0,是否生成带有i18n 0 不带有 1带有
+style,bigint,,是,NULL,代码风格
+child_table_name,varchar(200),,是,NULL,子表名称
+main_field,varchar(200),,是,NULL,主表关联键
+child_field,varchar(200),,是,NULL,子表关联键
+generator_type,char(1),,是,0,生成方式  0：zip压缩包   1：自定义目录
+backend_path,varchar(500),,是,NULL,后端生成路径
+frontend_path,varchar(500),,是,NULL,前端生成路径
+module_name,varchar(200),,是,NULL,模块名
+function_name,varchar(200),,是,NULL,功能名
+form_layout,tinyint,,是,NULL,表单布局  1：一列   2：两列
+ds_name,varchar(200),,是,NULL,数据源ID
+baseclass_id,bigint,,是,NULL,基类ID
+create_time,datetime,,是,NULL,创建时间
+
+表名,gen_table_column,表说明,代码生成表字段
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,
+ds_name,varchar(200),,是,NULL,数据源名称
+table_name,varchar(200),,是,NULL,表名称
+field_name,varchar(200),,是,NULL,字段名称
+field_type,varchar(200),,是,NULL,字段类型
+field_comment,varchar(200),,是,NULL,字段说明
+attr_name,varchar(200),,是,NULL,属性名
+attr_type,varchar(200),,是,NULL,属性类型
+package_name,varchar(200),,是,NULL,属性包名
+sort,int,,是,NULL,排序
+auto_fill,varchar(20),,是,NULL,自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE
+primary_pk,char(1),,是,0,主键 0：否  1：是
+base_field,char(1),,是,0,基类字段 0：否  1：是
+form_item,char(1),,是,0,表单项 0：否  1：是
+form_required,char(1),,是,0,表单必填 0：否  1：是
+form_type,varchar(200),,是,NULL,表单类型
+form_validator,varchar(200),,是,NULL,表单效验
+grid_item,char(1),,是,0,列表项 0：否  1：是
+grid_sort,char(1),,是,0,列表排序 0：否  1：是
+query_item,char(1),,是,0,查询项 0：否  1：是
+query_type,varchar(200),,是,NULL,查询方式
+query_form_type,varchar(200),,是,NULL,查询表单类型
+field_dict,varchar(200),,是,NULL,字典类型
+
+表名,gen_template,表说明,模板
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,主键
+template_name,varchar(255),,否,,模板名称
+generator_path,varchar(255),,否,,模板路径
+template_desc,varchar(255),,否,,模板描述
+template_code,text,,否,,模板代码
+create_time,datetime,,是,CURRENT_TIMESTAMP,创建时间
+update_time,datetime,,是,CURRENT_TIMESTAMP,更新
+del_flag,char(1),,否,0,删除标记
+create_by,varchar(64),,否, ,创建人
+update_by,varchar(64),,否, ,修改人
+
+表名,gen_template_group,表说明,模板分组关联表
+字段名,字段类型,主键,可为空,默认值,说明
+group_id,bigint,,否,,分组id
+template_id,bigint,,否,,模板id
+
+数据库,pig_config
+
+表名,config_info,表说明,config_info
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,id
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,是,NULL,group_id
+content,longtext,,否,,content
+md5,varchar(32),,是,NULL,md5
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+src_user,text,,是,,source user
+src_ip,varchar(50),,是,NULL,source ip
+app_name,varchar(128),,是,NULL,app_name
+tenant_id,varchar(128),,是,,租户字段
+c_desc,varchar(256),,是,NULL,configuration description
+c_use,varchar(64),,是,NULL,configuration usage
+effect,varchar(64),,是,NULL,配置生效的描述
+type,varchar(64),,是,NULL,配置的类型
+c_schema,text,,是,,配置的模式
+encrypted_data_key,varchar(1024),,否,,密钥
+
+表名,config_info_beta,表说明,config_info_beta
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,id
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,否,,group_id
+app_name,varchar(128),,是,NULL,app_name
+content,longtext,,否,,content
+beta_ips,varchar(1024),,是,NULL,betaIps
+md5,varchar(32),,是,NULL,md5
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+src_user,text,,是,,source user
+src_ip,varchar(50),,是,NULL,source ip
+tenant_id,varchar(128),,是,,租户字段
+encrypted_data_key,varchar(1024),,否,,密钥
+
+表名,config_info_gray,表说明,config_info_gray
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,id
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,否,,group_id
+content,longtext,,否,,content
+md5,varchar(32),,是,NULL,md5
+src_user,text,,是,,src_user
+src_ip,varchar(100),,是,NULL,src_ip
+gmt_create,datetime(3),,否,CURRENT_TIMESTAMP(3),gmt_create
+gmt_modified,datetime(3),,否,CURRENT_TIMESTAMP(3),gmt_modified
+app_name,varchar(128),,是,NULL,app_name
+tenant_id,varchar(128),,是,,tenant_id
+gray_name,varchar(128),,否,,gray_name
+gray_rule,text,,否,,gray_rule
+encrypted_data_key,varchar(256),,否,,encrypted_data_key
+
+表名,config_info_tag,表说明,config_info_tag
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,id
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,否,,group_id
+tenant_id,varchar(128),,是,,tenant_id
+tag_id,varchar(128),,否,,tag_id
+app_name,varchar(128),,是,NULL,app_name
+content,longtext,,否,,content
+md5,varchar(32),,是,NULL,md5
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+src_user,text,,是,,source user
+src_ip,varchar(50),,是,NULL,source ip
+
+表名,config_tags_relation,表说明,config_tag_relation
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,,否,,id
+tag_name,varchar(128),,否,,tag_name
+tag_type,varchar(64),,是,NULL,tag_type
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,否,,group_id
+tenant_id,varchar(128),,是,,tenant_id
+nid,bigint,是,否,,"nid, 自增长标识"
+
+表名,group_capacity,表说明,集群、各Group容量信息表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,主键ID
+group_id,varchar(128),,否,,Group ID，空字符表示整个集群
+quota,int,,否,0,配额，0表示使用默认值
+usage,int,,否,0,使用量
+max_size,int,,否,0,单个配置大小上限，单位为字节，0表示使用默认值
+max_aggr_count,int,,否,0,聚合子配置最大个数，，0表示使用默认值
+max_aggr_size,int,,否,0,单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值
+max_history_count,int,,否,0,最大变更历史数量
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+
+表名,his_config_info,表说明,多租户改造
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,,否,,id
+nid,bigint,是,否,,"nid, 自增标识"
+data_id,varchar(255),,否,,data_id
+group_id,varchar(128),,否,,group_id
+app_name,varchar(128),,是,NULL,app_name
+content,longtext,,否,,content
+md5,varchar(32),,是,NULL,md5
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+src_user,text,,是,,source user
+src_ip,varchar(50),,是,NULL,source ip
+op_type,char(10),,是,NULL,operation type
+tenant_id,varchar(128),,是,,租户字段
+encrypted_data_key,varchar(1024),,否,,密钥
+publish_type,varchar(50),,是,formal,publish type gray or formal
+gray_name,varchar(50),,是,NULL,gray name
+ext_info,longtext,,是,,ext info
+
+表名,permissions,表说明,
+字段名,字段类型,主键,可为空,默认值,说明
+role,varchar(50),,否,,role
+resource,varchar(128),,否,,resource
+action,varchar(8),,否,,action
+
+表名,roles,表说明,
+字段名,字段类型,主键,可为空,默认值,说明
+username,varchar(50),,否,,username
+role,varchar(50),,否,,role
+
+表名,tenant_capacity,表说明,租户容量信息表
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,主键ID
+tenant_id,varchar(128),,否,,Tenant ID
+quota,int,,否,0,配额，0表示使用默认值
+usage,int,,否,0,使用量
+max_size,int,,否,0,单个配置大小上限，单位为字节，0表示使用默认值
+max_aggr_count,int,,否,0,聚合子配置最大个数
+max_aggr_size,int,,否,0,单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值
+max_history_count,int,,否,0,最大变更历史数量
+gmt_create,datetime,,否,CURRENT_TIMESTAMP,创建时间
+gmt_modified,datetime,,否,CURRENT_TIMESTAMP,修改时间
+
+表名,tenant_info,表说明,tenant_info
+字段名,字段类型,主键,可为空,默认值,说明
+id,bigint,是,否,,id
+kp,varchar(128),,否,,kp
+tenant_id,varchar(128),,是,,tenant_id
+tenant_name,varchar(128),,是,,tenant_name
+tenant_desc,varchar(256),,是,NULL,tenant_desc
+create_source,varchar(32),,是,NULL,create_source
+gmt_create,bigint,,否,,创建时间
+gmt_modified,bigint,,否,,修改时间
+
+表名,users,表说明,
+字段名,字段类型,主键,可为空,默认值,说明
+username,varchar(50),是,否,,username
+password,varchar(500),,否,,password
+enabled,tinyint(1),,否,,enabled

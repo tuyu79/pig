@@ -1,0 +1,90 @@
+@startuml sequence-flow
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+
+title pig-auth 授权码模式流程
+
+actor "用户" as user
+participant "App前端" as fe
+participant "App后端" as be
+participant "pig-auth\n统一认证中心" as auth
+database "Redis" as redis
+
+user -> fe : 1.访问受保护资源
+fe --> user : 返回401
+fe -> auth : 2.重定向到登录中心
+auth -> auth : 3.显示登录页面
+user -> auth : 4.提交登录凭证
+auth -> auth : 5.验证用户
+auth -> fe : 6.重定向回redirect_uri?code=xxx
+fe -> be : 7.前端用code请求后端
+be -> auth : 8.POST /oauth2/token\ngrant_type=authorization_code
+auth -> redis : 验证并存储
+redis --> auth : OAuth2Authorization
+auth --> be : access_token + refresh_token
+be -> fe : 10.返回token
+
+@enduml
+
+@startuml refresh-flow
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+
+title pig-auth Refresh Token 刷新流程
+
+actor "用户" as user
+participant "App前端" as fe
+participant "App后端" as be
+participant "pig-auth" as auth
+database "Redis" as redis
+
+fe -> fe : access_token过期
+fe -> be : 发送刷新请求
+be -> auth : POST /oauth2/token\ngrant_type=refresh_token
+auth -> redis : 验证refresh_token
+redis --> auth : OAuth2Authorization
+auth -> auth : 生成新access_token
+auth --> be : 返回新token
+be -> fe : 返回新token
+
+@enduml
+
+@startuml architecture
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+
+title pig-auth 内部架构
+
+rectangle AuthorizationServerConfiguration #FFF2CC
+rectangle OAuth2TokenGenerator #E1D5C7
+rectangle AuthenticationConverters #E1D5C7
+database PigRedisOAuth2AuthorizationService #DAE8FC
+
+AuthorizationServerConfiguration --> OAuth2TokenGenerator : 使用
+AuthorizationServerConfiguration --> AuthenticationConverters : 使用
+AuthorizationServerConfiguration --> PigRedisOAuth2AuthorizationService : 依赖
+
+note right of PigRedisOAuth2AuthorizationService
+  **Redis Key:**
+  token::refresh_token::{tokenValue}
+end note
+
+@enduml
+
+@startuml judge
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+
+title 302/401 判断逻辑
+
+start
+:OAuth2AuthorizationCodeRequest\nAuthenticationConverter;
+
+if (X-Requested-With != XMLHttpRequest\nAND Accept contains text/html?) then (是)
+  :返回 302 跳转登录页;
+else (否)
+  :返回 401 JSON;
+endif
+stop
+
+@enduml

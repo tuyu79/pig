@@ -1,0 +1,357 @@
+@startuml pig-er-diagram
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 10
+skinparam linetype ortho
+
+title Pig 数据库 ER 关系图
+
+' 基础表
+entity "sys_dept\n部门管理" as sys_dept {
+  dept_id <<PK>> : bigint
+  name : varchar(50)
+  sort_order : int
+  parent_id <<FK>> : bigint
+  create_by : varchar(64)
+  update_by : varchar(64)
+  create_time : datetime
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "sys_dict\n字典表" as sys_dict {
+  id <<PK>> : bigint
+  dict_type : varchar(100)
+  description : varchar(100)
+  create_by : varchar(64)
+  update_by : varchar(64)
+  create_time : datetime
+  update_time : datetime
+  remarks : varchar(255)
+  system_flag : char(1)
+  del_flag : char(1)
+}
+
+entity "sys_dict_item\n字典项" as sys_dict_item {
+  id <<PK>> : bigint
+  dict_id <<FK>> : bigint
+  item_value : varchar(100)
+  label : varchar(100)
+  dict_type : varchar(100)
+  sort_order : int
+  del_flag : char(1)
+}
+
+entity "sys_user\n用户表" as sys_user {
+  user_id <<PK>> : bigint
+  username : varchar(64)
+  password : varchar(100)
+  salt : varchar(100)
+  phone : varchar(20)
+  avatar : varchar(100)
+  dept_id <<FK>> : bigint
+  create_by : varchar(64)
+  update_by : varchar(64)
+  create_time : datetime
+  update_time : datetime
+  del_flag : char(1)
+  lock_flag : char(1)
+}
+
+entity "sys_role\n系统角色表" as sys_role {
+  role_id <<PK>> : bigint
+  role_name : varchar(64)
+  role_code : varchar(64)
+  role_desc : varchar(140)
+  del_flag : char(1)
+  create_by : varchar(64)
+  create_time : datetime
+}
+
+entity "sys_menu\n菜单权限表" as sys_menu {
+  menu_id <<PK>> : bigint
+  name : varchar(32)
+  en_name : varchar(128)
+  permission : varchar(32)
+  path : varchar(128)
+  parent_id <<FK>> : bigint
+  icon : varchar(64)
+  visible : char(1)
+  sort_order : int
+  keep_alive : char(1)
+  menu_type : char(1)
+  del_flag : char(1)
+}
+
+entity "sys_post\n岗位信息表" as sys_post {
+  post_id <<PK>> : bigint
+  post_code : varchar(64)
+  post_name : varchar(50)
+  sort_order : int
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+' 关联表
+entity "sys_user_role\n用户角色表" as sys_user_role {
+  id <<PK>> : bigint
+  user_id <<FK>> : bigint
+  role_id <<FK>> : bigint
+}
+
+entity "sys_role_menu\n角色菜单表" as sys_role_menu {
+  id <<PK>> : bigint
+  role_id <<FK>> : bigint
+  menu_id <<FK>> : bigint
+}
+
+entity "sys_user_post\n用户岗位表" as sys_user_post {
+  id <<PK>> : bigint
+  user_id <<FK>> : bigint
+  post_id <<FK>> : bigint
+}
+
+entity "sys_log\n日志表" as sys_log {
+  id <<PK>> : bigint
+  log_type : char(1)
+  title : varchar(255)
+  service_id : varchar(32)
+  create_by : varchar(64)
+  create_time : datetime
+  remote_addr : varchar(255)
+  user_agent : varchar(1000)
+  request_uri : varchar(255)
+  method : varchar(10)
+  params : text
+  time : bigint
+  del_flag : char(1)
+  exception : text
+}
+
+entity "sys_file\n文件管理表" as sys_file {
+  id <<PK>> : bigint
+  file_name : varchar(100)
+  bucket_name : varchar(200)
+  original : varchar(100)
+  type : varchar(50)
+  file_size : bigint
+  create_by : varchar(64)
+  create_time : datetime
+  del_flag : char(1)
+}
+
+entity "sys_oauth_client_details\n终端信息表" as sys_oauth_client_details {
+  client_id <<PK>> : varchar(64)
+  resource_ids : varchar(256)
+  client_secret : varchar(256)
+  scope : varchar(256)
+  authorized_grant_types : varchar(256)
+  web_server_redirect_uri : varchar(256)
+  authorities : varchar(256)
+  access_token_validity : int
+  refresh_token_validity : int
+  additional_information : text
+  auto_approve : varchar(256)
+}
+
+entity "sys_public_param\n公共参数配置表" as sys_public_param {
+  id <<PK>> : bigint
+  param_name : varchar(256)
+  param_key : varchar(256)
+  param_value : text
+  param_type : char(1)
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "sys_job\n定时任务调度表" as sys_job {
+  job_id <<PK>> : bigint
+  job_name : varchar(64)
+  job_group : varchar(64)
+  job_type : char(1)
+  cron_expression : varchar(64)
+  jar_path : varchar(200)
+  class_name : varchar(200)
+  method_name : varchar(100)
+  job_data : text
+  misfire_policy : char(1)
+  job_status : char(1)
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+  remark : varchar(200)
+}
+
+entity "sys_job_log\n定时任务执行日志表" as sys_job_log {
+  id <<PK>> : bigint
+  job_id <<FK>> : bigint
+  job_name : varchar(64)
+  job_group : varchar(64)
+  job_type : char(1)
+  execute_status : char(1)
+  exception_info : text
+  start_time : datetime
+  end_time : datetime
+  execute_time : bigint
+  create_time : datetime
+}
+
+' 代码生成相关
+entity "gen_datasource_conf\n数据源表" as gen_datasource_conf {
+  id <<PK>> : bigint
+  name : varchar(50)
+  jdbc_username : varchar(50)
+  jdbc_password : varchar(50)
+  jdbc_url : varchar(200)
+  jdbc_driver : varchar(50)
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "gen_group\n模板分组" as gen_group {
+  id <<PK>> : bigint
+  name : varchar(50)
+  description : varchar(200)
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "gen_table\n代码生成表" as gen_table {
+  table_id <<PK>> : bigint
+  table_name : varchar(200)
+  table_comment : varchar(200)
+  class_name : varchar(100)
+  datasource_id <<FK>> : bigint
+  package_name : varchar(200)
+  module_name : varchar(100)
+  parent_group_id <<FK>> : bigint
+  sub_table_id <<FK>> : bigint
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "gen_table_column\n代码生成表字段" as gen_table_column {
+  column_id <<PK>> : bigint
+  table_id <<FK>> : bigint
+  column_name : varchar(200)
+  column_comment : varchar(200)
+  column_type : varchar(100)
+  java_type : varchar(100)
+  java_field : varchar(100)
+  is_pk : char(1)
+  is_nullable : char(1)
+  is_increment : char(1)
+  is_insert : char(1)
+  is_edit : char(1)
+  is_list : char(1)
+  is_query : char(1)
+  query_type : varchar(50)
+  sort_order : int
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+}
+
+entity "gen_template\n模板" as gen_template {
+  id <<PK>> : bigint
+  name : varchar(50)
+  file_name : varchar(100)
+  file_path : varchar(200)
+  engine_type : varchar(20)
+  category_id <<FK>> : bigint
+  create_by : varchar(64)
+  create_time : datetime
+  update_by : varchar(64)
+  update_time : datetime
+  del_flag : char(1)
+}
+
+entity "gen_template_group\n模板分组关联表" as gen_template_group {
+  id <<PK>> : bigint
+  template_id <<FK>> : bigint
+  group_id <<FK>> : bigint
+}
+
+' 关系
+sys_dept ||--o{ sys_dept : "parent_id"
+sys_dict ||--o{ sys_dict_item : "dict_id"
+sys_dict_item }o--|| sys_dict : "dict_id"
+sys_user ||--o{ sys_user_role : ""
+sys_role ||--o{ sys_user_role : ""
+sys_user_role }o--|| sys_user : "user_id"
+sys_user_role }o--|| sys_role : "role_id"
+
+sys_menu ||--o{ sys_role_menu : ""
+sys_role ||--o{ sys_role_menu : ""
+sys_role_menu }o--|| sys_menu : "menu_id"
+sys_role_menu }o--|| sys_role : "role_id"
+
+sys_user ||--o{ sys_user_post : ""
+sys_post ||--o{ sys_user_post : ""
+sys_user_post }o--|| sys_user : "user_id"
+sys_user_post }o--|| sys_post : "post_id"
+
+sys_user }o--|| sys_dept : "dept_id"
+
+sys_job ||--o{ sys_job_log : "job_id"
+sys_job_log }o--|| sys_job : "job_id"
+
+gen_datasource_conf ||--o{ gen_table : "datasource_id"
+gen_table }o--|| gen_datasource_conf : "datasource_id"
+
+gen_group ||--o{ gen_table : "parent_group_id"
+gen_table }o--|| gen_group : "parent_group_id"
+
+gen_table ||--o{ gen_table_column : "table_id"
+gen_table_column }o--|| gen_table : "table_id"
+
+gen_template ||--o{ gen_template_group : ""
+gen_group ||--o{ gen_template_group : ""
+gen_template_group }o--|| gen_template : "template_id"
+gen_template_group }o--|| gen_group : "group_id"
+
+note right of sys_dept
+  部门树形结构
+  parent_id 自关联
+end note
+
+note right of sys_dict
+  字典类型定义
+  如: log_type, gender
+end note
+
+note right of sys_user
+  用户基本信息
+  dept_id 关联部门
+end note
+
+note right of sys_user_role
+  用户-角色多对多
+end note
+
+note right of sys_role_menu
+  角色-菜单多对多
+end note
+
+note right of sys_user_post
+  用户-岗位多对多
+end note
+
+@enduml
