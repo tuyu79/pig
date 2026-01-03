@@ -1,0 +1,133 @@
+@startuml resume-system-architecture
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+skinparam linetype ortho
+
+title 简历系统架构图
+
+' 接入层
+node "用户端" as client {
+  [Web浏览器]
+  [移动端]
+}
+
+' 网关层
+node "Pig Gateway" as gateway {
+}
+
+' 服务层
+node "Resume Service\n简历服务" as resume_service {
+  [ResumeController]
+  [EducationController]
+  [WorkController]
+  [ProjectController]
+  [SkillController]
+  [CertController]
+  [PortfolioController]
+  [TemplateController]
+  [ExportController]
+}
+
+' 外部集成
+cloud "Pig Auth\n统一认证" as pig_auth {
+}
+
+cloud "MinIO/OSS\n文件存储" as storage {
+}
+
+database "MySQL\n(pig库)" as mysql {
+  [resume_resume]
+  [resume_template]
+  [resume_education]
+  [resume_work]
+  [resume_project]
+  [resume_skill]
+  [resume_cert]
+  [resume_portfolio]
+}
+
+' 连接关系
+client --> gateway : HTTPS
+gateway --> resume_service : 路由
+resume_service --> pig_auth : Token验证
+resume_service --> mysql : CRUD
+resume_service --> storage : 文件上传/下载
+
+' 简历服务内部
+ResumeController --> EducationController : 简历管理
+ResumeController --> WorkController
+ResumeController --> ProjectController
+ResumeController --> SkillController
+ResumeController --> CertController
+ResumeController --> PortfolioController
+ResumeController --> TemplateController : 模板切换
+ResumeController --> ExportController : 导出PDF
+
+note right of resume_service
+  Spring Boot 3.x
+  复用 pig-auth 认证
+  共用 MySQL 数据库
+end note
+
+@enduml
+
+@startuml resume-sequence
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 10
+
+title 简历创建流程
+
+actor "用户" as user
+participant "ResumeController" as controller
+participant "ResumeService" as service
+participant "ResumeMapper" as mapper
+database "MySQL" as db
+
+user -> controller : POST /api/resume/resume
+controller -> service : createResume(dto)
+service -> mapper : insert(resume)
+mapper -> db : INSERT INTO resume_resume
+db --> mapper : 返回ID
+mapper --> service : 返回ID
+service -> mapper : batchInsert(educations)
+mapper -> db : INSERT INTO resume_education
+service -> mapper : batchInsert(works)
+mapper -> db : INSERT INTO resume_work
+service --> controller : 返回简历ID
+controller --> user : {code: 0, data: {id: 1}}
+
+@enduml
+
+@startuml resume-export-sequence
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 10
+
+title 简历导出 PDF 流程
+
+actor "用户" as user
+participant "ExportController" as controller
+participant "ResumeService" as service
+participant "PdfGenerator" as pdf
+participant "FreeMarkerRenderer" as freemarker
+database "MySQL" as db
+
+user -> controller : POST /api/resume/resume/1/export/pdf
+controller -> service : getResumeDetail(1)
+service -> db : 查询简历信息
+db --> service : 简历数据
+service --> controller : 简历DTO
+controller -> freemarker : 渲染HTML(freemarker模板, 数据)
+freemarker --> controller : HTML内容
+controller -> pdf : convertHtmlToPdf(html)
+pdf --> controller : PDF文件流
+controller --> user : 文件流(PDF)
+
+note right of controller
+  导出流程:
+  1. 查询简历数据
+  2. 渲染FreeMarker模板
+  3. HTML转PDF
+  4. 返回文件流
+end note
+
+@enduml
