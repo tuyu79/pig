@@ -16,13 +16,14 @@ pipeline {
             }
         }
 
-          stage('Echo test') {
-                  steps {
-                      sh 'echo "开始打包 pig-register 模块..." && echo "执行成功标记"'
-                      sh 'echo what is path: $PATH'
-                      sh 'echo 验证执行成功: $?' // $?是Shell执行状态码，0=成功，非0=失败
-                  }
-              }
+stage('Echo test') {
+    steps {
+        sh 'echo "开始打包 pig-register 模块..." >&2'
+        sh 'echo what is path: $PATH >&2'
+        sh 'echo 验证执行成功: $? >&2'
+        sh 'echo 当前Maven路径: $MAVEN_HOME >&2' // 验证MAVEN_HOME是否生效
+    }
+}
 
 
         stage('Build with Maven') {
