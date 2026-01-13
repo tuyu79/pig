@@ -12,6 +12,7 @@ pipeline {
 
         stage('Echo test') {
                 steps {
+                sh 'echo "开始打包 pig-register 模块..."'
                     sh 'echo what is path: $PATH'
                 }
             }
