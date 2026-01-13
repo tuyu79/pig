@@ -100,3 +100,6 @@ Sec-Ch-Ua-Mobile: ?0
 Sec-Ch-Ua-Platform: "macOS"
 Host: localhost:8888
 
+
+###
+GET http://127.0.0.1:9999/auth/oauth2/authorize?response_type=code&client_id=resume&scope=server&state=-lPifVhU0rLHn3Teg_P36oURwIUwJKcm9aP-Q8xA75I=&redirect_uri=http://localhost:7001/login/oauth2/code/custom-oauth
