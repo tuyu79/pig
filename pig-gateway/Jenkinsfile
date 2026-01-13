@@ -10,7 +10,7 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Echo test') {
                 steps {
                     sh 'echo what is path: $PATH'
                 }
