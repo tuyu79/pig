@@ -10,25 +10,15 @@ pipeline {
 
     stages {
 
-            stage('Checkout') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-stage('Echo test') {
-    steps {
-        sh 'echo "开始打包 pig-register 模块..." >&2'
-        sh 'echo what is path: $PATH >&2'
-        sh 'echo 验证执行成功: $? >&2'
-        sh 'echo 当前Maven路径: $MAVEN_HOME >&2' // 验证MAVEN_HOME是否生效
-    }
-}
-
-
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests -f pig-gateway/pom.xml'
+                sh '/opt/apache-maven-3.9.11/bin/mvn clean package -DskipTests -f pig-gateway/pom.xml'
             }
         }
 
