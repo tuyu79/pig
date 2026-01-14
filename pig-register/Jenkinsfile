@@ -4,8 +4,6 @@ pipeline {
     environment {
         IMAGE_NAME = 'pig-register'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        MAVEN_HOME = "/opt/apache-maven-3.9.11"
-        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin:/usr/bin"
     }
 
     stages {
