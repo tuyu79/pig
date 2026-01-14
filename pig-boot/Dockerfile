@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/dockerhub_mirror/java:21-anolis
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /pig-boot
 
