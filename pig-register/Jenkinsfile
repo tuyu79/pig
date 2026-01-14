@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = "/Users/abel/.sdkman/candidates/java/17.0.9-graalce"
         MAVEN_HOME = "/Users/abel/.sdkman/candidates/maven/3.9.11"
-        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin:/opt/homebrew/bin/docker"
+        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin:/opt/homebrew/bin"
     }
 
     stages {
