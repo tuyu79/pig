@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                sh 'echo $PATH'
                 checkout scm
             }
         }
