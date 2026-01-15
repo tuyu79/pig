@@ -35,8 +35,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh "docker rm -f pig/${IMAGE_NAME} || true"
-                    sh "docker run -d -p 5002:5002 --name pig/${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rm -f ${IMAGE_NAME} || true"
+                    sh "docker run -d -p 5002:5002 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
