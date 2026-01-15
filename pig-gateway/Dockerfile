@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/dockerhub_mirror/java:21-anolis
+FROM openjdk:17
 
 WORKDIR /pig-gateway
 
@@ -10,4 +10,4 @@ EXPOSE 9999
 
 ENV TZ=Asia/Shanghai JAVA_OPTS="-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom"
 
-CMD sleep 60; java $JAVA_OPTS -jar app.jar
+CMD java $JAVA_OPTS -jar app.jar
