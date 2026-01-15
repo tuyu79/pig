@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'pig-register'
+        IMAGE_NAME = 'pig-gateway'
         IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = "/Users/abel/.sdkman/candidates/java/17.0.9-graalce"
         MAVEN_HOME = "/Users/abel/.sdkman/candidates/maven/3.9.11"
