@@ -29,19 +29,22 @@ pipeline {
             }
         }
 
-        stage('Clean Up') {
+        stage('Deploy') {
             steps {
-                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"
+                script {
+                    sh "docker rm -f ${IMAGE_NAME} || true"
+                    sh "docker run -d -p 3000:3000 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Build successful! Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+            echo "Deploy successful! Image: ${IMAGE_NAME}:${IMAGE_TAG}"
         }
         failure {
-            echo "Build failed!"
+            echo "Deploy failed!"
         }
     }
 }
