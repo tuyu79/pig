@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM amazoncorretto:17.0.17-al2023-headless
 
 WORKDIR /pig-auth
 
