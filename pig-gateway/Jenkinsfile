@@ -13,7 +13,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests -f pig-register/pom.xml'
+                sh 'mvn clean package -DskipTests -f pig-gateway/pom.xml'
             }
         }
 
@@ -21,8 +21,8 @@ pipeline {
             steps {
                 script {
                     docker.build("${IMAGE_NAME}:${IMAGE_TAG}",
-                        "--build-arg JAR_FILE=pig-register/target/pig-register.jar " +
-                        "-f pig-register/Dockerfile .")
+                        "--build-arg JAR_FILE=pig-gateway/target/pig-gateway.jar " +
+                        "-f pig-gateway/Dockerfile .")
                 }
             }
         }
