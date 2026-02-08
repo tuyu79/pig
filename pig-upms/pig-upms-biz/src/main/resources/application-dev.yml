@@ -1,11 +1,4 @@
-server:
-  port: 4000
-
 spring:
-  profiles:
-    active: dev
-  application:
-    name: @artifactId@
   cloud:
     nacos:
       username: @nacos.username@
