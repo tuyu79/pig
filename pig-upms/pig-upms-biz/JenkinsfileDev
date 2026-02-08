@@ -26,8 +26,8 @@ pipeline {
             steps {
                 script {
                     docker.build("${IMAGE_NAME}:${IMAGE_TAG}-dev",
-                        "--build-arg JAR_FILE=pig-upms/target/pig-upms.jar " +
-                        "-f pig-upms/Dockerfile .")
+                        "--build-arg JAR_FILE=pig-upms/pig-upms-biz/target/pig-upms.jar " +
+                        "-f pig-upms/pig-upms-biz/Dockerfile .")
                 }
             }
         }
