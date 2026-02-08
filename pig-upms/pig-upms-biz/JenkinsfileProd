@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'pig-auth-prod'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        JAVA_HOME = "/Users/abel/.sdkman/candidates/java/17.0.9-graalce"
+        MAVEN_HOME = "/Users/abel/.sdkman/candidates/maven/3.9.11"
+        PATH = "${env.PATH}:${env.MAVEN_HOME}/bin:/opt/homebrew/bin:/usr/local/bin"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean package -DskipTests -f pig-auth/pom.xml'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}-prod",
+                        "--build-arg JAR_FILE=pig-auth/target/pig-auth.jar " +
+                        "-f pig-auth/Dockerfile .")
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sh "docker rm -f ${IMAGE_NAME} || true"
+                    sh "docker run -d --name ${IMAGE_NAME} --network dev --label project=dev ${IMAGE_NAME}:${IMAGE_TAG}-prod"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deploy successful! Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+        }
+        failure {
+            echo "Deploy failed!"
+        }
+    }
+}
