@@ -6,6 +6,14 @@ spring:
     active: dev
   application:
     name: @artifactId@
+  cloud:
+    nacos:
+      username: @nacos.username@
+      password: @nacos.password@
+      discovery:
+        server-addr: ${NACOS_HOST:pig-register-@profiles.active@}:${NACOS_PORT:8848}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
   config:
     import:
       - nacos:application-@profiles.active@.yml
