@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     sh "docker rm -f ${IMAGE_NAME} || true"
-                    sh "docker run -d -p 8081:8081 -p 8848:8848 -p 9848:9848 --name ${IMAGE_NAME} --network dev ${IMAGE_NAME}:${IMAGE_TAG}-dev"
+                    sh "docker run -d --name ${IMAGE_NAME} --network dev ${IMAGE_NAME}:${IMAGE_TAG}-dev"
                 }
             }
         }
