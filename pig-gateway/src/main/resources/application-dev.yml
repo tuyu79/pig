@@ -1,0 +1,7 @@
+spring:
+      discovery:
+        server-addr: ${NACOS_HOST:pig-regitser-dev}:${NACOS_PORT:8848}
+
+
+
+
