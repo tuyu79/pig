@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'pig-auth-prod'
+        IMAGE_NAME = 'pig-upms-prod'
         IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = "/Users/abel/.sdkman/candidates/java/17.0.9-graalce"
         MAVEN_HOME = "/Users/abel/.sdkman/candidates/maven/3.9.11"
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests -f pig-auth/pom.xml'
+                sh 'mvn clean package -DskipTests -f pig-upms/pom.xml'
             }
         }
 
@@ -26,8 +26,8 @@ pipeline {
             steps {
                 script {
                     docker.build("${IMAGE_NAME}:${IMAGE_TAG}-prod",
-                        "--build-arg JAR_FILE=pig-auth/target/pig-auth.jar " +
-                        "-f pig-auth/Dockerfile .")
+                        "--build-arg JAR_FILE=pig-upms/pig-upms-biz/target/pig-upms-biz.jar " +
+                        "-f pig-upms/pig-upms-biz/Dockerfile .")
                 }
             }
         }
